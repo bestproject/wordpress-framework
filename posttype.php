@@ -2,7 +2,6 @@
 
 namespace BestProject\Wordpress;
 
-//use BestProject\Wordpress\Theme;
 use BestProject\Wordpress\PostType\Labels;
 use BestProject\Wordpress\PostType\Arguments;
 use BestProject\Wordpress\PostType\MetaBox;

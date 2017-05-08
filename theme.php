@@ -4,6 +4,7 @@ namespace BestProject\Wordpress;
 
 use BestProject\Wordpress\Sidebar;
 use BestProject\Wordpress\Language;
+use BestProject\Wordpress\Widget;
 
 class Theme
 {
@@ -47,6 +48,7 @@ class Theme
 
 		$this->registerSidebars($sidebars);
 		$this->registerFeatures();
+		$this->registerWidgets();
 
 		self::$instance = $this;
 	}
@@ -60,10 +62,11 @@ class Theme
 	 */
 	public static function &getInstance()
 	{
-		if (self::$instance instanceof Theme) {
+		$className = __CLASS__;
+		if (self::$instance instanceof $className) {
 			return self::$instance;
 		} else {
-			throw new Exception('Currently there is no instance of `Theme` class. Please create it, then use getInstance() method.');
+			throw new \Exception('Currently there is no instance of `Theme` class. Please create it, then use getInstance() method.');
 		}
 	}
 
@@ -73,7 +76,7 @@ class Theme
 	 * @param	Mixed	$default	Default property
 	 * @return	Mixed
 	 */
-	public function get($name, $default = null)
+	public static function get($name, $default = null)
 	{
 		if (isset($this->$name)) {
 			return $this->$name;
@@ -83,15 +86,26 @@ class Theme
 	}
 
 	/**
+	 * Return this theme name.
+	 * @return	String
+	 */
+	public static function getName()
+	{
+		return basename(get_stylesheet_directory());
+	}
+
+	/**
 	 * Declares sidebars for the theme.
 	 *
 	 * @param	Array	$sidebars	An array of BestProject\Wordpress\Theme\Sidebar instances.
 	 */
 	protected function registerSidebars(array $sidebars)
 	{
+
 		if (!empty($sidebars)) {
 			foreach ($sidebars AS $sidebar) {
-				if ($sidebar instanceof Sidebar) {
+				$className = 'BestProject\\Wordpress\\Theme\\Sidebar'; //$className
+				if ($sidebar instanceof \BestProject\Wordpress\Theme\Sidebar) {
 					$sidebar->register();
 				} elseif (is_string($sidebar)) {
 					(new Sidebar($sidebar, Language::_($sidebar)))->register();
@@ -119,5 +133,31 @@ class Theme
 	{
 //		var_dump($this->features);
 //		die;
+	}
+
+	/**
+	 * Register all the widgets in this framework.
+	 */
+	protected function registerWidgets()
+	{
+
+		// Scan directory for widgets
+		$widgets = glob(__DIR__.'/widget/*', GLOB_ONLYDIR);
+
+		foreach ($widgets AS $widget) {
+			$name	 = basename($widget);
+			$path	 = $widget.'/'.$name.'.php';
+
+			// If there is a widget declaration file
+			if (file_exists($path)) {
+
+				// Include the widget class
+				require_once $path;
+
+				// Register widget
+				$className = '\\BestProject\\Wordpress\\Widget\\'.ucfirst($name);
+				call_user_func(array($className, 'register'), $className);
+			}
+		}
 	}
 }

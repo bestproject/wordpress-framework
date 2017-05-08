@@ -15,9 +15,17 @@ namespace BestProject\Wordpress {
 
 		/**
 		 * Holds current language code (eg. eb_GB)
+		 *
 		 * @var String
 		 */
 		protected static $code;
+
+		/**
+		 * Name of current theme.
+		 * 
+		 * @var	String
+		 */
+		protected static $themeName;
 
 		/**
 		 * Load all translations into memmory.
@@ -29,8 +37,7 @@ namespace BestProject\Wordpress {
 			}
 
 			/* @var $theme Theme */
-			$theme	 = Theme::getInstance();
-			$path	 = $theme->get('path');
+			$path = get_stylesheet_directory();
 
 			$filename = $path.'/languages/'.self::$code.'.ini';
 			if (!file_exists($filename)) {
@@ -54,12 +61,15 @@ namespace BestProject\Wordpress {
 				self::load();
 			}
 
+			if (is_null(self::$themeName)) {
+				self::$themeName = Theme::getName();
+			}
+
 			if (func_num_args() === 1) {
 				if (isset(self::$strings[$string])) {
 					return self::$strings[$string];
 				} else {
-					$theme = Theme::getInstance()->get('name');
-					return __($string, $theme);
+					return __($string, self::$themeName);
 				}
 			} else {
 				if (isset(self::$strings[$string])) {
@@ -69,16 +79,14 @@ namespace BestProject\Wordpress {
 
 					return call_user_func_array('sprintf', $args);
 				} else {
-					$theme	 = Theme::getInstance()->get('name');
 					$args	 = func_get_args();
-					$args	 = array_push($args, $theme);
+					$args	 = array_push($args, self::$themeName);
 
 					return call_user_func_array('__', $args);
 				}
 			}
 		}
 	}
-
 }
 
 namespace {
@@ -91,10 +99,10 @@ namespace {
 	 */
 	function t($string)
 	{
-		if( !is_null($string) ) {
-			return Language::_(func_get_args());
+		if (!is_null($string)) {
+			return call_user_func_array('BestProject\Wordpress\Language::_',
+				func_get_args());
 		}
 	}
-
 }
 

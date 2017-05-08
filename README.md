@@ -7,7 +7,7 @@ Simple load the ``_autoload.php`` in your ``functions.php``
     require_once __DIR__.'/vendor/bestproject/wordpress-framework/_autoload.php';
     
 ## Theme
-This class is used to register basic info about theme like features and Sidebars.
+This class is used to register basic info about theme like features and sidebars.
 
 ## Sidebar
 This class takes care of registering each of the custom sidebars and is passed to the `Theme` construct method.

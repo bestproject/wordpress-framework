@@ -1,8 +1,8 @@
 <?php
 
-namespace BestProject\Wordpress\PostType;
+namespace BestProject\Wordpress;
 
-use BestProject\Wordpress\PostType\FieldInterface;
+use BestProject\Wordpress\FieldInterface;
 use BestProject\Wordpress\Language;
 
 abstract class Field implements FieldInterface
@@ -67,14 +67,22 @@ abstract class Field implements FieldInterface
 	 * @param	String	$value				Default Value for this field.
 	 * @param	Boolean	$display_in_list	Should this field be displayed as column of this post type list?
 	 */
-	public function __construct($name, $label, $description = '', $hint = '',
+	public function __construct($name, $label = '', $description = '', $hint = '',
 							 $id = '', $required = false, $value = '', $display_in_list = false)
 	{
-		$this->name				 = $name;
-		$this->label			 = Language::_($label);
+		$this->name = $name;
+		if (empty($label)) {
+			$this->label = Language::_('FIELD_'.strtoupper($name).'_LABEL');
+		} else {
+			$this->label = Language::_($label);
+		}
 		$this->description		 = Language::_($description);
 		$this->hint				 = Language::_($hint);
-		$this->id				 = empty($id) ? $name : $id;
+		if (empty($id)) {
+			$this->id = preg_replace("/[^0-9_a-zA-Z]/", "", str_ireplace(array('[',']'), '_', $name) );
+		} else {
+			$this->id = $id;
+		}
 		$this->required			 = (bool) $required;
 		$this->value			 = $value;
 		$this->display_in_list	 = $display_in_list;
@@ -135,7 +143,7 @@ abstract class Field implements FieldInterface
 				: '');
 		ob_start();
 		?><div class="field"><label for="<?php echo $this->name ?>"<?php echo $description ?>><?php echo $this->label ?></label><?php
-		?><div class=""><?php echo $this->getInput(); ?></div><?php
+		?><div class="field-input"><?php echo $this->getInput(); ?></div><?php
 		?></div><?php
 		return ob_get_clean();
 	}

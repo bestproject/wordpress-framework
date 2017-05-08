@@ -1,6 +1,6 @@
 <?php
 
-namespace BestProject\Wordpress\PostType;
+namespace BestProject\Wordpress;
 
 interface FieldInterface {
 

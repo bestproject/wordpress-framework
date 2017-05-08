@@ -55,12 +55,12 @@ class Sidebar
 	 * @param	String	$item_tag		Container tag for each sidebar item.
 	 * @param	String	$item_class		Class for each item container.
 	 */
-	public function __construct($id, $name, $description = '', $header_tag = 'h2',
+	public function __construct($id, $name = '', $description = '', $header_tag = 'h2',
 							 $item_tag = 'div', $item_class = 'sidebar')
 	{
 		$this->id			 = $id;
-		$this->name			 = $name;
-		$this->description	 = $description;
+		$this->name			 = empty($name) ? 'SIDEBAR_'.strtoupper($id) : $name;
+		$this->description	 = empty($description) ? 'SIDEBAR_'.strtoupper($id).'_DESC' : $description;
 		$this->header_tag	 = $header_tag;
 		$this->item_tag		 = $item_tag;
 		$this->item_class	 = $item_class;
