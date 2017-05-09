@@ -39,19 +39,33 @@ class Theme
 	protected static $instance;
 
 	/**
+	 * Remove selected pages from interface.
+	 *
+	 * @var	Array
+	 */
+	protected $remove_pages;
+
+	/**
 	 *
 	 * @param	Array	$sidebars	Array of supported sidebars (string or Sidebar class instances).
 	 * @param	Array	$features	Array of features supported by this theme (https://developer.wordpress.org/reference/functions/add_theme_support/#post-formats)
+	 * @param	Array	$remove_pages	Array of pages to remvoe from admin interface.
 	 */
-	public function __construct($sidebars = array(), Array $features = array())
+	public function __construct($sidebars = array(), Array $features = array(),
+							 Array $remove_pages = array())
 	{
-		$this->path		 = get_stylesheet_directory();
-		$this->name		 = basename($this->path);
-		$this->features	 = $features;
+		$this->path			 = get_stylesheet_directory();
+		$this->name			 = basename($this->path);
+		$this->features		 = $features;
+		$this->remove_pages	 = $remove_pages;
 
 		$this->registerSidebars($sidebars);
 		$this->registerFeatures();
 		$this->registerWidgets();
+
+		if (is_admin()) {
+			$this->removePages();
+		}
 
 		self::$instance = $this;
 	}
@@ -178,6 +192,24 @@ class Theme
 				$className = '\\'.ucfirst($name);
 				call_user_func(array($className, 'register'), $className);
 			}
+		}
+	}
+
+	/**
+	 * Add hook to remove selected pages from admin interface.
+	 */
+	public function removePages()
+	{
+		add_action('admin_menu', [$this, 'removePagesAction']);
+	}
+
+	/**
+	 * Method to remove selected pages from admin interface.
+	 */
+	public function removePagesAction()
+	{
+		foreach ($this->remove_pages AS $page) {
+			remove_menu_page($page);
 		}
 	}
 }
