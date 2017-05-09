@@ -5,6 +5,9 @@ namespace BestProject\Wordpress;
 use BestProject\Wordpress\Language;
 use BestProject\Wordpress\Widget\WidgetInterface;
 
+/**
+ * Class that takes care of the all the functions required by Wordpress to create a widget.
+ */
 abstract class Widget extends \WP_Widget implements WidgetInterface
 {
 	/**
@@ -65,15 +68,20 @@ abstract class Widget extends \WP_Widget implements WidgetInterface
 	 */
 	public function widget($args, $instance)
 	{
-		$this->instance	 = $instance;
-		$title			 = apply_filters('widget_title', $instance['title']);
+		$this->instance = $instance;
 
 		ob_start();
 
 		// before and after widget arguments are defined by themes
 		echo $args['before_widget'];
-		if (!empty($title)) {
-			echo $args['before_title'].$title.$args['after_title'];
+
+		// If there is title field in this widget
+		if (isset($instance['title']) AND ! empty($instance['title'])) {
+
+			$title = apply_filters('widget_title', $instance['title']);
+			if (!empty($title)) {
+				echo $args['before_title'].$title.$args['after_title'];
+			}
 		}
 		$this->render($instance, $args);
 		echo $args['after_widget'];
@@ -88,18 +96,6 @@ abstract class Widget extends \WP_Widget implements WidgetInterface
 	 */
 	public function form($instance)
 	{
-		if (isset($instance['title'])) {
-			$title = $instance['title'];
-		} else {
-			$title = Language::_('NEW_WIDGET_TITLE');
-		}
-		// Widget admin form
-		?>
-		<p>
-			<label for="<?php echo $this->get_field_id('title') ?>"><?php Language::_('Title:') ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('title') ?>" name="<?php echo $this->get_field_name('title') ?>" type="text" value="<?php echo esc_attr($title) ?>" />
-		</p>
-		<?php
 		$fields = $this->getFields();
 
 		$html = '';
@@ -133,14 +129,39 @@ abstract class Widget extends \WP_Widget implements WidgetInterface
 	 */
 	public function update($new_instance, $old_instance)
 	{
-		ob_start();
-		print_r($old_instance);
-		print_r($new_instance);
-		$buff = ob_get_clean();
-
-		file_put_contents(__DIR__.'/text.log', $buff);
 
 		return $new_instance;
+	}
+
+	/**
+	 * Renders the widget.
+	 *
+	 * @param	Array	$instance	An array of widget instance data.
+	 * @param	Array	$args		An array of widget/sidebar data.
+	 */
+	public function render($instance, $args)
+	{
+
+		// Get name of the widget
+		$reflection		 = new \ReflectionClass($this);
+		$filename		 = strtolower($reflection->getName());
+		$override_path	 = get_template_directory().'/template-parts/widgets/'.$filename.'.php';
+
+		// If there is html override for this widget in a template, render it
+		if (file_exists($override_path)) {
+			extract($instance);
+
+			require $override_path;
+
+			// If there is no override. Just print the data
+		} else {
+			ob_start();
+			foreach ($instance AS $key => $variable) {
+				if ($key !== 'title') {
+					?><div><h4><?php echo Language::_(strtoupper($key)) ?></h4><div><?php echo $variable ?></div></div><?php
+				}
+			}
+		}
 	}
 
 	/**

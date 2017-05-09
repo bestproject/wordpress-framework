@@ -3,7 +3,9 @@
 namespace BestProject\Wordpress\Field;
 
 use BestProject\Wordpress\Field;
-
+/**
+ * TODO: Fixind displaying of widget interface.
+ */
 class Editor extends Field
 {
 

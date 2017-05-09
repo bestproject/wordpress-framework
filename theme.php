@@ -6,6 +6,9 @@ use BestProject\Wordpress\Sidebar;
 use BestProject\Wordpress\Language;
 use BestProject\Wordpress\Widget;
 
+/**
+ * Wordpress Theme class that takes care of all the required functions to build a theme and use custom widgets.
+ */
 class Theme
 {
 	/**
@@ -131,8 +134,7 @@ class Theme
 	 */
 	protected function registerFeatures()
 	{
-//		var_dump($this->features);
-//		die;
+		// TODO: Register features.
 	}
 
 	/**
@@ -141,7 +143,7 @@ class Theme
 	protected function registerWidgets()
 	{
 
-		// Scan directory for widgets
+		// Scan framework directory for widgets
 		$widgets = glob(__DIR__.'/widget/*', GLOB_ONLYDIR);
 
 		foreach ($widgets AS $widget) {
@@ -156,6 +158,24 @@ class Theme
 
 				// Register widget
 				$className = '\\BestProject\\Wordpress\\Widget\\'.ucfirst($name);
+				call_user_func(array($className, 'register'), $className);
+			}
+		}
+
+		// Scan template directory for widgets
+		$template_widgets_path = dirname(dirname(dirname(__DIR__))).'/widgets';
+		if (is_dir($template_widgets_path)) {
+			$widgets = glob($template_widgets_path.'/*');
+
+			foreach ($widgets AS $widget_path) {
+
+				$name = pathinfo($widget_path, PATHINFO_FILENAME);
+
+				// Include the widget class
+				require_once $widget_path;
+
+				// Register widget
+				$className = '\\'.ucfirst($name);
 				call_user_func(array($className, 'register'), $className);
 			}
 		}
