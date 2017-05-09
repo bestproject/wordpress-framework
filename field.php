@@ -142,9 +142,9 @@ abstract class Field implements FieldInterface
 		$description = (!empty($this->description) ? ' title="'.$this->description.'"'
 				: '');
 		ob_start();
-		?><div class="field"><label for="<?php echo $this->name ?>"<?php echo $description ?>><?php echo $this->label ?></label><?php
-		?><div class="field-input"><?php echo $this->getInput(); ?></div><?php
-		?></div><?php
+		?><p class="field"><label for="<?php echo $this->name ?>"<?php echo $description ?>><?php echo $this->label ?></label><?php
+		?><span class="field-input"><?php echo $this->getInput(); ?></span><?php
+		?></p><?php
 		return ob_get_clean();
 	}
 
