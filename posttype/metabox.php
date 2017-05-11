@@ -84,6 +84,10 @@ class MetaBox
 
 		/* @var $field Field */
 		foreach ($this->fields AS $field) {
+			// Make sure field will display in WP styl
+			$field->set('class','widefat');
+
+			// Render field
 			$html .= $field->render();
 		}
 
