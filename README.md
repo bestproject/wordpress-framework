@@ -22,3 +22,6 @@ This class is passed to the PostType `constructor` and declares a single MetaBox
 
 ## Widget
 This class takes care of creating custom widgets with separated view.
+
+## Form
+Creating and sending from forms.

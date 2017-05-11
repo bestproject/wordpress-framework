@@ -1,6 +1,6 @@
 <?php
 
-namespace BestProject\Wordpress\Object;
+namespace BestProject\Wordpress;
 
 /**
  * Just a basic structure for basic class methods.

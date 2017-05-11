@@ -1,8 +1,8 @@
 <?php
 
-namespace BestProject\Wordpress\Field;
+namespace BestProject\Wordpress\Form\Field;
 
-use BestProject\Wordpress\Field;
+use BestProject\Wordpress\Form\Field;
 
 /**
  * Textarea field.

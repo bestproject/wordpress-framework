@@ -1,8 +1,8 @@
 <?php
 
-namespace BestProject\Wordpress;
+namespace BestProject\Wordpress\Form;
 
-use BestProject\Wordpress\FieldInterface;
+use BestProject\Wordpress\Form\FieldInterface;
 use BestProject\Wordpress\Language;
 
 abstract class Field implements FieldInterface

@@ -1,10 +1,10 @@
 <?php
 
-namespace BestProject\Wordpress\Field;
+namespace BestProject\Wordpress\Form\Field;
 
-use BestProject\Wordpress\Field;
+use BestProject\Wordpress\Form\Field;
 
-class Email extends Field
+class Url extends Field
 {
 
 	/**
@@ -16,6 +16,6 @@ class Email extends Field
 		$value		 = (!empty($this->value) ? ' value="'.$this->value.'"' : '');
 		$hint		 = (!empty($this->hint) ? ' placeholder="'.$this->hint.'"' : '');
 		$required	 = ($this->required ? ' required' : '');
-		?><input type="email" class="widefat" name="<?php echo $this->name ?>"<?php echo $id ?><?php echo $value ?><?php echo $hint ?><?php echo $required ?>><?php
+		?><input type="url" class="widefat" name="<?php echo $this->name ?>"<?php echo $id ?><?php echo $value ?><?php echo $hint ?><?php echo $required ?>><?php
 	}
 }

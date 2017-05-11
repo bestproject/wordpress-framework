@@ -1,6 +1,6 @@
 <?php
 
-namespace BestProject\Wordpress;
+namespace BestProject\Wordpress\Form;
 
 interface FieldInterface {
 
