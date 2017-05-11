@@ -224,7 +224,7 @@ class Labels
 	 * @return	Arguments
 	 */
 	public function &set($property, $value = true) {
-		$this->$property = $value;
+		$this->$property = Language::_($value);
 		return $this;
 	}
 
