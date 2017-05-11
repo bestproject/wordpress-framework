@@ -154,7 +154,7 @@ abstract class Field implements FieldInterface
 		$label_class = (!empty($this->label_class) ? ' title="'.$this->label_class.'"': '');
 		ob_start();
 		?><p class="field"><label for="<?php echo $this->name ?>"<?php echo $description ?><?php echo $label_class ?>><?php echo $this->label ?></label><?php
-		?><span class="field-input"><?php echo $this->getInput(); ?></span><?php
+		?><div class="field-input"><?php echo $this->getInput(); ?></div><?php
 		?></p><?php
 		return ob_get_clean();
 	}
