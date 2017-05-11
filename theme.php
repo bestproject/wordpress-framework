@@ -65,6 +65,12 @@ class Theme
 
 		if (is_admin()) {
 			$this->removePages();
+		} else {
+
+			// Remove generator tag
+			add_filter('the_generator',function(){
+				return '';
+			});
 		}
 
 		self::$instance = $this;
