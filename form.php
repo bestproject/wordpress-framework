@@ -43,7 +43,9 @@ class Form {
 	 */
 	public function __construct($name, Array $fields) {
 		$this->name = $name;
-		$this->fields = $fields;
+		foreach( $fields AS $field ) {
+			$this->fields[$field->get('name')] = $field;
+		}
 
 		// Set basic form attributes
 		$this->setAttribute('name', $name);
@@ -74,6 +76,44 @@ class Form {
 		$this->attributes[$name] = $value;
 
 		return $this;
+	}
+
+	/**
+	 * Render a selected form field.
+	 * 
+	 * @param	String	$name	Name of a field to render.
+	 * @return	String
+	 */
+	public function renderField($name){
+		if( isset($this->fields[$name]) ) {
+			return $this->fields[$name]->render();
+		} else {
+			throw new Exception('Field '.$name.' was not found in this form.', 500);
+		}
+	}
+
+	/**
+	 * Does this form validate? Check each field if it validates.
+	 * 
+	 * @return	Boolean
+	 */
+	public function validate(){
+
+		// Validate each form field.
+		$validates = true;
+		foreach( $this->fields AS $field ) {
+
+			// Get validation result
+			$validate_result = $field->validate();
+
+			// If this field did not validate add its error message to form errors.
+			if( $validate_result!==true ) {
+				$this->errors[] = $validate_result;
+				$validates = false;
+			}
+		}
+		
+		return $validates;
 	}
 
 }
