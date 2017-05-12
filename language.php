@@ -50,7 +50,7 @@ namespace BestProject\Wordpress {
 		}
 
 		/**
-		 * Returns a translated version of provided string.
+		 * Returns a translated version of provided string. If more then 1 attribute is provided `sprintf` will be used.
 		 * 
 		 * @param	String	$string	Key that represents the translation.
 		 * @return	String
@@ -94,6 +94,7 @@ namespace {
 	/**
 	 * Translating text through \BestProject\Wordpress\Language with fallback to original
 	 * "_" function. Just something to be used as a shortcut in templates.
+	 * If more then 1 attribute is provided `sprintf` will be used.
 	 *
 	 * @return String
 	 */
