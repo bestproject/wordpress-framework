@@ -3,7 +3,7 @@
 namespace BestProject\Wordpress\Widget;
 
 use BestProject\Wordpress\Widget;
-use BestProject\Wordpress\Field;
+use BestProject\Wordpress\Form\Field;
 
 // Creating the widget
 class Editor extends Widget
