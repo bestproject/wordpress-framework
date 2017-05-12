@@ -63,6 +63,20 @@ abstract class Field implements FieldInterface
 	protected $label_class;
 
 	/**
+	 * Class of a field input.
+	 *
+	 * @var String
+	 */
+	protected $class;
+
+	/**
+	 * Display without a label?
+	 *
+	 * @var Boolean
+	 */
+	protected $hide_label;
+
+	/**
 	 * Creates new Field instance.
 	 *
 	 * @param	String	$name				Name of of this field.
@@ -73,11 +87,13 @@ abstract class Field implements FieldInterface
 	 * @param	Boolean	$required			Is this field is required?
 	 * @param	String	$value				Default Value for this field.
 	 * @param	Boolean	$display_in_list	Should this field be displayed as column of this post type list?
-	 * @param	String	$label_class	Should this field be displayed as column of this post type list?
+	 * @param	String	$label_class		Class of this fields label.
+	 * @param	String	$class				Class of this fields input.
+	 * @param	Boolean	$hide_label			Display without a label?
 	 */
 	public function __construct($name, $label = '', $description = '', $hint = '',
 							 $id = '', $required = false, $value = '', $display_in_list = false,
-							 $label_class = '')
+							 $label_class = '', $class = '', $hide_label = false)
 	{
 		$this->name = $name;
 		if (empty($label)) {
@@ -95,8 +111,17 @@ abstract class Field implements FieldInterface
 		}
 		$this->required			 = (bool) $required;
 		$this->value			 = $value;
-		$this->label_class		 = $label_class;
 		$this->display_in_list	 = $display_in_list;
+		$this->label_class		 = $label_class;
+		
+		if (empty($class) AND is_admin()) {
+			$this->class = 'wideflat';
+		} else {
+			$this->class = $class;
+		}
+		if (!$this->hide_label) {
+			$this->hide_label = $hide_label;
+		}
 	}
 
 	/**
@@ -150,22 +175,39 @@ abstract class Field implements FieldInterface
 	public function render()
 	{
 		$this->value = $this->getValue($this->value);
-		$description = (!empty($this->description) ? ' title="'.$this->description.'"': '');
-		$label_class = (!empty($this->label_class) ? ' title="'.$this->label_class.'"': '');
+		$description = (!empty($this->description) ? ' title="'.$this->description.'"'
+				: '');
+		$label_class = (!empty($this->label_class) ? ' class="'.$this->label_class.'"'
+				: '');
 		ob_start();
-		?><p class="field"><label for="<?php echo $this->name ?>"<?php echo $description ?><?php echo $label_class ?>><?php echo $this->label ?></label><?php
-		?><div class="field-input"><?php echo $this->getInput(); ?></div><?php
-		?></p><?php
-		return ob_get_clean();
-	}
+		?><p class="form-group"><?php
+			// Should this field have a label?
+			if (!$this->hide_label):
+				?><label for="<?php echo $this->name ?>"<?php echo $description ?><?php echo $label_class ?>><?php echo $this->label ?></label><?php
+			endif;
+			?><?php echo $this->getInput(); ?><?php
+			?></p><?php
+			return ob_get_clean();
+		}
 
-	/**
-	 * Get data prior saving. Separate method to allow overriding.
-	 * 
-	 * @return	String
-	 */
-	public function getSaveData()
-	{
-		return filter_input(INPUT_POST, $this->name, FILTER_DEFAULT);
+		/**
+		 * Get data prior saving. Separate method to allow overriding.
+		 *
+		 * @return	String
+		 */
+		public function getSaveData()
+		{
+			return filter_input(INPUT_POST, $this->name, FILTER_DEFAULT);
+		}
+
+		/**
+		 * Was this field filled correctly.
+		 *
+		 * @return	Boolean
+		 */
+		public function validate()
+		{
+
+			return true;
+		}
 	}
-}
