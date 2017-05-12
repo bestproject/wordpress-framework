@@ -63,8 +63,16 @@ class Theme
 		$this->registerFeatures();
 		$this->registerWidgets();
 
+		// Default theme behavior for back-end pages
 		if (is_admin()) {
+
+			// Remove selected admin pages
 			$this->removePages();
+
+			// Add admin stylesheets
+			add_action( 'admin_enqueue_scripts', [$this, 'registerFrameworkAdminAssets'] );
+
+		// Theme behavior for front-end
 		} else {
 
 			// Remove generator tag
@@ -74,6 +82,14 @@ class Theme
 		}
 
 		self::$instance = $this;
+	}
+
+	/**
+	 * Register framework assets. it is called automaticly. You don't have to do it manualy.
+	 */
+	public function registerFrameworkAdminAssets() {
+		wp_register_style( 'bp_wordpress_framework', get_template_directory_uri().'/vendor/bestproject/wordpress-framework/assets/admin.min.css', false, bloginfo('version') );
+		wp_enqueue_style( 'bp_wordpress_framework' );
 	}
 
 	/**
