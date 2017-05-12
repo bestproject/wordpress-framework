@@ -207,6 +207,13 @@ abstract class Field implements FieldInterface
 		 */
 		public function validate()
 		{
+			// Get form data
+			$data = $this->getSaveData();
+
+			// If this field is required and is empty.
+			if( $this->required AND empty($data) ) {
+				return false;
+			}
 
 			return true;
 		}
