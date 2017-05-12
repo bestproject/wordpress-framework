@@ -116,4 +116,15 @@ class Form {
 		return $validates;
 	}
 
+	/**
+	 * Return errors list.
+	 * 
+	 * @return	Array
+	 */
+	public function getErrors() {
+		return $this->errors;
+	}
+
+	
+
 }
