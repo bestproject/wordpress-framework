@@ -5,6 +5,9 @@ namespace BestProject\Wordpress\Form;
 use BestProject\Wordpress\Form\FieldInterface;
 use BestProject\Wordpress\Language;
 
+/**
+ * A form field prototype.
+ */
 abstract class Field implements FieldInterface
 {
 	/**
