@@ -97,12 +97,12 @@ abstract class Field implements FieldInterface
 	{
 		$this->name = $name;
 		if (empty($label)) {
-			$this->label = Language::_('FIELD_'.strtoupper($name).'_LABEL');
+			$this->label ='FIELD_'.strtoupper($name).'_LABEL';
 		} else {
-			$this->label = Language::_($label);
+			$this->label = $label;
 		}
-		$this->description	 = Language::_($description);
-		$this->hint			 = Language::_($hint);
+		$this->description	 = $description;
+		$this->hint			 = $hint;
 		if (empty($id)) {
 			$this->id = preg_replace("/[^0-9_a-zA-Z]/", "",
 				str_ireplace(array('[', ']'), '_', $name));
@@ -175,7 +175,7 @@ abstract class Field implements FieldInterface
 	public function render()
 	{
 		$this->value = $this->getValue($this->value);
-		$description = (!empty($this->description) ? ' title="'.$this->description.'"'
+		$description = (!empty($this->description) ? ' title="'.Language::_($this->description).'"'
 				: '');
 		$label_class = (!empty($this->label_class) ? ' class="'.$this->label_class.'"'
 				: '');
@@ -183,7 +183,7 @@ abstract class Field implements FieldInterface
 		?><p class="form-group"><?php
 			// Should this field have a label?
 			if (!$this->hide_label):
-				?><label for="<?php echo $this->name ?>"<?php echo $description ?><?php echo $label_class ?>><?php echo $this->label ?></label><?php
+				?><label for="<?php echo $this->name ?>"<?php echo $description ?><?php echo $label_class ?>><?php echo Language::_($this->label) ?></label><?php
 			endif;
 			?><?php echo $this->getInput(); ?><?php
 			?></p><?php
