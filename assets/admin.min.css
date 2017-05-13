@@ -1,2 +1,2 @@
 
-textarea.wideflat{width:100%;box-sizing:border-box}
+textarea.wideflat,input[type='email'].wideflat,input[type='text'].wideflat{width:100%;box-sizing:border-box}
