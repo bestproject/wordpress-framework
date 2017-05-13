@@ -217,7 +217,7 @@ abstract class Field implements FieldInterface
 
 			// If this field is required and is empty.
 			if( $this->required AND empty($data) ) {
-				return false;
+				return Language::_('FORM_FIELD_MISSING_INPUT_S', Language::_($this->label));
 			}
 
 			return true;
