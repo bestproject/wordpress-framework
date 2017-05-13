@@ -1,6 +1,5 @@
 <?php
 
-
 namespace BestProject\Wordpress;
 
 defined('ABSPATH') or die;
