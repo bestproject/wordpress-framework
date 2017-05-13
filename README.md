@@ -1,5 +1,7 @@
 # Wordpress Framework
-A set of classes to build Wordpress websites in more humane way.
+A set of classes to build Wordpress websites in more humane way. This framework 
+allows you to create Wordpress themes, widgets, sidebars and forms without knowing 
+all those funcy functions.
 
 ## Installation
 
