@@ -197,12 +197,18 @@ abstract class Field implements FieldInterface
 
 		/**
 		 * Get data prior saving. Separate method to allow overriding.
-		 *
+		 * 
+		 * @param	Mixed	$default	Default value if there is no input for this field.
 		 * @return	String
 		 */
-		public function getSaveData()
+		public function getSaveData($default = '')
 		{
-			return filter_input(INPUT_POST, $this->name, FILTER_DEFAULT);
+			$input = filter_input(INPUT_POST, $this->name, FILTER_DEFAULT);
+			if ( empty($input) OR $input===false ) {
+				return $default;
+			} else {
+				return $input;
+			}
 		}
 
 		/**
