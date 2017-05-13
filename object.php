@@ -43,7 +43,7 @@ trait Object
 		if (property_exists($this, $property)) {
 			$this->$property = $value;
 		} else {
-			throw new ErrorException('Property <b>'.$property.'</b> does not exists in <b>'.$className.'</b>',
+			throw new Exception('Property <b>'.$property.'</b> does not exists in <b>'.$className.'</b>',
 			500);
 		}
 	}
