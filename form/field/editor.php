@@ -1,8 +1,12 @@
 <?php
 
+
 namespace BestProject\Wordpress\Form\Field;
 
+defined('ABSPATH') or die;
+
 use BestProject\Wordpress\Form\Field;
+
 /**
  * TODO: Fixind displaying of widget interface.
  */

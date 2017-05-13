@@ -2,6 +2,8 @@
 
 namespace BestProject\Wordpress\Form\Field;
 
+defined('ABSPATH') or die;
+
 use BestProject\Wordpress\Form\Field,
 	BestProject\Wordpress\Language;
 

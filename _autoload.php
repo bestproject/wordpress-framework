@@ -1,4 +1,7 @@
 <?php
+
+defined('ABSPATH') or die;
+
 spl_autoload_register(function($classname) {
 
 	$path = explode('\\', $classname);

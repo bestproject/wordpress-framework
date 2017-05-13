@@ -1,10 +1,13 @@
 <?php
 
+
 namespace BestProject\Wordpress;
 
-use BestProject\Wordpress\PostType\Labels;
-use BestProject\Wordpress\PostType\Arguments;
-use BestProject\Wordpress\PostType\MetaBox;
+defined('ABSPATH') or die;
+
+use BestProject\Wordpress\PostType\Labels,
+	BestProject\Wordpress\PostType\Arguments,
+	BestProject\Wordpress\PostType\MetaBox;
 
 /**
  * This class takes care of creating new custom post type.

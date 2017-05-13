@@ -2,6 +2,8 @@
 
 namespace BestProject\Wordpress\Form;
 
+defined('ABSPATH') or die;
+
 interface FieldInterface {
 
 	/**

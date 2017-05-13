@@ -1,6 +1,9 @@
 <?php
 
+
 namespace BestProject\Wordpress;
+
+defined('ABSPATH') or die;
 
 /**
  * Just a basic structure for basic class methods.

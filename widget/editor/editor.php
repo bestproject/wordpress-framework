@@ -2,13 +2,23 @@
 
 namespace BestProject\Wordpress\Widget;
 
-use BestProject\Wordpress\Widget;
-use BestProject\Wordpress\Form\Field;
+defined('ABSPATH') or die;
 
-// Creating the widget
+use BestProject\Wordpress\Widget,
+	BestProject\Wordpress\Form\Field;
+
+/**
+ * Editor widget definition.
+ */
 class Editor extends Widget
 {
 
+	/**
+	 * Method that renders the widget.
+	 * 
+	 * @param	Array	$instance
+	 * @param	Array	$args
+	 */
 	public function render($instance, $args)
 	{
 

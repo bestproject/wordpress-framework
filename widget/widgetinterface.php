@@ -2,6 +2,11 @@
 
 namespace BestProject\Wordpress\Widget;
 
+defined('ABSPATH') or die;
+
+/**
+ * Interface for Widgets definition.
+ */
 interface WidgetInterface {
 
 	public function widget($args, $instance);

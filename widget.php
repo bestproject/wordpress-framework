@@ -2,8 +2,10 @@
 
 namespace BestProject\Wordpress;
 
-use BestProject\Wordpress\Language;
-use BestProject\Wordpress\Widget\WidgetInterface;
+defined('ABSPATH') or die;
+
+use BestProject\Wordpress\Language,
+	BestProject\Wordpress\Widget\WidgetInterface;
 
 /**
  * Class that takes care of the all the functions required by Wordpress to create a widget.

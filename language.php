@@ -1,9 +1,15 @@
 <?php
 
+
 namespace BestProject\Wordpress {
+	
+	defined('ABSPATH') or die;
 
 	use BestProject\Wordpress\Theme;
 
+	/**
+	 * Localization class. Takes care of translating strings constants into a proper language.
+	 */
 	class Language
 	{
 		/**

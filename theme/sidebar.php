@@ -2,6 +2,8 @@
 
 namespace BestProject\Wordpress\Theme;
 
+defined('ABSPATH') or die;
+
 use BestProject\Wordpress\Language;
 
 /**

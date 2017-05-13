@@ -2,7 +2,7 @@
 
 namespace BestProject\Wordpress\PostType;
 
-use BestProject\Wordpress\Theme;
+defined('ABSPATH') or die;
 
 /**
  * This class takes care of passing custom post type arguments.

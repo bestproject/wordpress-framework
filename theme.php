@@ -2,9 +2,10 @@
 
 namespace BestProject\Wordpress;
 
-use BestProject\Wordpress\Sidebar;
-use BestProject\Wordpress\Language;
-use BestProject\Wordpress\Widget;
+use BestProject\Wordpress\Sidebar,
+	BestProject\Wordpress\Language;
+
+defined('ABSPATH') or die;
 
 /**
  * Wordpress Theme class that takes care of all the required functions to build a theme and use custom widgets.

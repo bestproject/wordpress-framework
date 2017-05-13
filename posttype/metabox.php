@@ -2,8 +2,13 @@
 
 namespace BestProject\Wordpress\PostType;
 
+defined('ABSPATH') or die;
+
 use BestProject\Wordpress\Language;
 
+/**
+ * MetaBox class.
+ */
 class MetaBox
 {
 	/**
