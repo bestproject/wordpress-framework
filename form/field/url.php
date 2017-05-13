@@ -34,8 +34,8 @@ class Url extends Field
 	public function validate()
 	{
 
-		if (!parent::validate() OR ! filter_var($this->getSaveData(),
-				FILTER_VALIDATE_URL)) {
+		if (!parent::validate() OR filter_var($this->getSaveData(),
+				FILTER_VALIDATE_URL)===false) {
 			return false;
 		}
 

@@ -33,7 +33,7 @@ class Email extends Field
 	 */
 	public function validate() {
 
-		if( !parent::validate() OR !filter_var($this->getSaveData(), FILTER_VALIDATE_EMAIL) ) {
+		if( !parent::validate() OR filter_var($this->getSaveData(), FILTER_VALIDATE_EMAIL)===false ) {
 			return false;
 		}
 
