@@ -12,375 +12,385 @@ defined('ABSPATH') or die;
 class Form
 {
 
-	use Object;
-	/**
-	 * Name of this form.
-	 * 
-	 * @var	String
-	 */
-	protected $name;
+    use Object;
+    /**
+     * Name of this form.
+     *
+     * @var    String
+     */
+    protected $name;
 
-	/**
-	 * List of form fields.
-	 * 
-	 * @var	Array
-	 */
-	protected $fields;
+    /**
+     * List of form fields.
+     *
+     * @var    Array
+     */
+    protected $fields;
 
-	/**
-	 * Form method.
-	 * 
-	 * @var	String
-	 */
-	protected $method;
+    /**
+     * Form method.
+     *
+     * @var    String
+     */
+    protected $method;
 
-	/**
-	 * Array of form tag attributes.
-	 * 
-	 * @var	Array
-	 */
-	protected $attributes;
+    /**
+     * Array of form tag attributes.
+     *
+     * @var    Array
+     */
+    protected $attributes;
 
-	/**
-	 * Recipient for this form data. It accepts a valid email, name of a form field
-	 * that holds the email or a PostType instance that should hold the data.
-	 * It also accepts array of those values.
-	 *
-	 * Form is processing the recipients and its input on construct if $recipient is not empty.
-	 *
-	 * @var	Mixed
-	 */
-	protected $recipient;
+    /**
+     * Recipient for this form data. It accepts a valid email, name of a form field
+     * that holds the email or a PostType instance that should hold the data.
+     * It also accepts array of those values.
+     *
+     * Form is processing the recipients and its input on construct if $recipient is not empty.
+     *
+     * @var    Mixed
+     */
+    protected $recipient;
 
-	/**
-	 * Holds list of form errors (mostly validation).
-	 *
-	 * @var	Array
-	 */
-	protected $errors = array();
+    /**
+     * Holds list of form errors (mostly validation).
+     *
+     * @var    Array
+     */
+    protected $errors = array();
 
-	/**
-	 * Subject of an e-mail if there are e-mail recipipients for this form.
-	 *
-	 * @var	String
-	 */
-	protected $mail_subject = '';
+    /**
+     * Subject of an e-mail if there are e-mail recipipients for this form.
+     *
+     * @var    String
+     */
+    protected $mail_subject = '';
 
-	/**
-	 * Sender e-mail if there are e-mail recipients for form.
-	 *
-	 * @var	String
-	 */
-	protected $mail_sender = '';
+    /**
+     * Sender e-mail if there are e-mail recipients for form.
+     *
+     * @var    String
+     */
+    protected $mail_sender = '';
 
-	/**
-	 * Name of the sender if there are e-mail recipients for form.
-	 *
-	 * @var	String
-	 */
-	protected $mail_sender_name = '';
+    /**
+     * Name of the sender if there are e-mail recipients for form.
+     *
+     * @var    String
+     */
+    protected $mail_sender_name = '';
 
-	/**
-	 * Create new Form instance.
-	 *
-	 * @param	String	$name				Name of this form.
-	 * @param	Array	$fields				List of form fields.
-	 * @param	Mixed	$recipient			Recipient for this form data. It accepts a valid email, name of a form field that holds the email or a PostType instance that should hold the data. It also accepts array of those values.
-	 * @param	String	$mail_subject		Subject for a mail if there are e-mail recipients in this form.
-	 * @param	String	$mail_sender_name	Name of a sender if there are e-mail recipients in this form.
-	 */
-	public function __construct($name, Array $fields, $recipient = array(),
-							 $mail_subject = '', $mail_sender = '', $mail_sender_name = '')
-	{
+    /**
+     * Create new Form instance.
+     *
+     * @param    String    $name                Name of this form.
+     * @param    Array    $fields                List of form fields.
+     * @param    Mixed    $recipient            Recipient for this form data. It accepts a valid email, name of a form field that holds the email or a PostType instance that should hold the data. It also accepts array of those values.
+     * @param    String    $mail_subject        Subject for a mail if there are e-mail recipients in this form.
+     * @param    String    $mail_sender_name    Name of a sender if there are e-mail recipients in this form.
+     */
+    public function __construct($name, Array $fields, $recipient = array(),
+                                $mail_subject = '', $mail_sender = '',
+                                $mail_sender_name = '')
+    {
 
-		// Add fields using its name as array key so we can access them easly later
-		foreach ($fields AS $field) {
-			$this->fields[$field->get('name')] = $field;
-		}
+        // Add fields using its name as array key so we can access them easly later
+        foreach ($fields AS $field) {
+            $this->fields[$field->get('name')] = $field;
+        }
 
-		// Set default params
-		$this->set('name', $name);
-		$this->set('recipient', $recipient);
-		$this->set('mail_subject', $mail_subject);
-		$this->set('mail_sender', $mail_sender);
-		$this->set('mail_sender_name', $mail_sender_name);
+        // Set default params
+        $this->set('name', $name);
+        $this->set('recipient', $recipient);
+        $this->set('mail_subject', $mail_subject);
+        $this->set('mail_sender', $mail_sender);
+        $this->set('mail_sender_name', $mail_sender_name);
 
-		// Set basic form attributes
-		$this->setAttribute('method', 'post');
-		$this->setAttribute('id', 'form-'.$name);
-		$this->setAttribute('action', filter_input(INPUT_SERVER, 'REQUEST_URI').'#form-'.$name);
-	}
+        // Set basic form attributes
+        $this->setAttribute('method', 'post');
+        $this->setAttribute('id', 'form-'.$name);
+        $this->setAttribute('action',
+            filter_input(INPUT_SERVER, 'REQUEST_URI').'#form-'.$name);
+    }
 
-	/**
-	 * Get a render list of form attributes like name, action, method.
-	 */
-	public function renderFormAttributes()
-	{
-		$html = '';
-		foreach ($this->attributes AS $attribute => $value) {
-			$html .= $attribute.'="'.htmlentities($value).'" ';
-		}
+    /**
+     * Get a render list of form attributes like name, action, method.
+     */
+    public function renderFormAttributes()
+    {
+        $html = '';
+        foreach ($this->attributes AS $attribute => $value) {
+            $html .= $attribute.'="'.htmlentities($value).'" ';
+        }
 
-		return trim($html);
-	}
+        return trim($html);
+    }
 
-	/**
-	 * Set a form tag attribute and return form instance for chaining.
-	 * 
-	 * @param	String	$name	Attribute name.
-	 * @param	String	$value	Attribute value.
-	 */
-	public function setAttribute($name, $value)
-	{
-		$this->attributes[$name] = $value;
+    /**
+     * Set a form tag attribute and return form instance for chaining.
+     *
+     * @param    String    $name    Attribute name.
+     * @param    String    $value    Attribute value.
+     */
+    public function setAttribute($name, $value)
+    {
+        $this->attributes[$name] = $value;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Return selected form attribute.
-	 * 
-	 * @param	String	$name		Attribute name to return.
-	 * @param	Mixed	$default	Default value.
-	 * @return String
-	 */
-	public function getAttribute($name, $default = '')
-	{
-		if (isset($this->attributes[$name])) {
-			return $this->attributes[$name];
-		} else {
-			return $default;
-		}
-	}
+    /**
+     * Return selected form attribute.
+     *
+     * @param    String    $name        Attribute name to return.
+     * @param    Mixed    $default    Default value.
+     * @return String
+     */
+    public function getAttribute($name, $default = '')
+    {
+        if (isset($this->attributes[$name])) {
+            return $this->attributes[$name];
+        } else {
+            return $default;
+        }
+    }
 
-	/**
-	 * Render a selected form field.
-	 * 
-	 * @param	String	$name	Name of a field to render.
-	 * @return	String
-	 */
-	public function renderField($name)
-	{
-		if (isset($this->fields[$name])) {
-			return $this->fields[$name]->render();
-		} else {
-			throw new Exception('Field '.$name.' was not found in this form.', 500);
-		}
-	}
+    /**
+     * Render a selected form field.
+     *
+     * @param    String    $name    Name of a field to render.
+     * @return    String
+     */
+    public function renderField($name)
+    {
+        if (isset($this->fields[$name])) {
+            return $this->fields[$name]->render();
+        } else {
+            if (defined('WP_DEBUG') AND WP_DEBUG) {
+                throw new \Exception('Field '.$name.' was not found in this form.',
+                500);
+            }
+        }
+    }
 
-	/**
-	 * Does this form validate? Check each field if it validates.
-	 * 
-	 * @return	Boolean
-	 */
-	public function validate()
-	{
+    /**
+     * Does this form validate? Check each field if it validates.
+     *
+     * @return    Boolean
+     */
+    public function validate()
+    {
 
-		// Validate each form field.
-		$validates = true;
-		foreach ($this->fields AS $field) {
+        // Validate each form field.
+        $validates = true;
+        foreach ($this->fields AS $field) {
 
-			// Get validation result
-			$validate_result = $field->validate();
+            // Get validation result
+            $validate_result = $field->validate();
 
-			// If this field did not validate add its error message to form errors.
-			if ($validate_result !== true) {
+            // If this field did not validate add its error message to form errors.
+            if ($validate_result !== true) {
 
-				$this->errors[]	 = $validate_result;
-				$validates		 = false;
-			}
-		}
+                $this->errors[] = $validate_result;
+                $validates      = false;
+            }
+        }
 
-		return $validates;
-	}
+        return $validates;
+    }
 
-	/**
-	 * Return errors list.
-	 * 
-	 * @return	Array
-	 */
-	public function getErrors()
-	{
-		return $this->errors;
-	}
+    /**
+     * Return errors list.
+     *
+     * @return    Array
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
 
-	/**
-	 * Process form input. Returns:
-	 * TRUE: If every recipient was processed correctly.
-	 * FALSE: If there was a single error while processing the recipients.
-	 * NULL: If there is no data to process.
-	 */
-	public function processInput()
-	{
+    /**
+     * Process form input. Returns:
+     * TRUE: If every recipient was processed correctly.
+     * FALSE: If there was a single error while processing the recipients.
+     * NULL: If there is no data to process.
+     */
+    public function processInput()
+    {
 
-		// Is there anything to process
-		if (strtoupper($this->attributes['method']) == 'POST' AND empty($_POST)) {
-			return;
-		} elseif (strtoupper($this->attributes['method']) == 'GET' AND empty($_GET)) {
-			return;
-		}
+        // Is there anything to process
+        if (strtoupper($this->attributes['method']) == 'POST' AND empty($_POST)) {
+            return;
+        } elseif (strtoupper($this->attributes['method']) == 'GET' AND empty($_GET)) {
+            return;
+        }
 
-		// Holding recipient processing results
-		$results = array();
+        // Check if form validates
+        if (!$this->validate()) {
+            return false;
+        }
 
-		// If there is a list providing recipients
-		if (is_array($this->recipient)) {
+        // Holding recipient processing results
+        $results = array();
 
-			// Process each recipient
-			foreach ($this->recipient AS $recipient) {
-				$results[] = $this->processRecipient($recipient);
-			}
+        // If there is a list providing recipients
+        if (is_array($this->recipient)) {
 
-			// its a single recipient
-		} else {
-			$results[] = $this->processRecipient($this->recipient);
-		}
+            // Process each recipient
+            foreach ($this->recipient AS $recipient) {
+                $results[] = $this->processRecipient($recipient);
+            }
 
-		// Was there any error while processing the recipients list?
-		if ( in_array(false, $results)) {
-			return false;
+            // its a single recipient
+        } else {
+            $results[] = $this->processRecipient($this->recipient);
+        }
 
-		// All recipients processed without an error
-		} elseif( !empty($results) ) {
-			return true;
-		}
-	}
+        // Was there any error while processing the recipients list?
+        if (in_array(false, $results)) {
+            return false;
 
-	/**
-	 * Process selected recipient.
-	 * 
-	 * @param	$recipient
-	 */
-	private function processRecipient($recipient)
-	{
+            // All recipients processed without an error
+        } elseif (!empty($results)) {
+            return true;
+        }
+    }
 
-		// Its a PostType
-		$className = '\\BestProject\\Wordpress\\PostType';
-		if (is_object($recipient) AND ( $recipient instanceof $className)) {
-			// TODO: Process PostType as a recipient
-			//
-			
-			// Is an object but wrong type
-		} elseif (is_object($recipient)) {
-			throw new \Exception('Wrong object provided as a form recipient.');
+    /**
+     * Process selected recipient.
+     *
+     * @param    $recipient
+     */
+    private function processRecipient($recipient)
+    {
 
-			// String provided
-		} elseif (is_string($recipient)) {
+        // Its a PostType
+        $className = '\\BestProject\\Wordpress\\PostType';
+        if (is_object($recipient) AND ( $recipient instanceof $className)) {
+            // TODO: Process PostType as a recipient
+            //
 
-			$recipient = (string) $recipient;
+            // Is an object but wrong type
+        } elseif (is_object($recipient)) {
+            throw new \Exception('Wrong object provided as a form recipient.');
 
-			// Is this a valid e-mail
-			$is_valid_email = !(filter_var($recipient, FILTER_VALIDATE_EMAIL) === false);
+            // String provided
+        } elseif (is_string($recipient)) {
 
-			// Is this not a valid email but a valid form field name that holds an e-mail
-			if (!$is_valid_email AND isset($this->fields[$recipient]) AND ! (filter_var($this->fields[$recipient]->getSaveData(),
-					FILTER_VALIDATE_EMAIL) === false)) {
-				$recipient		 = $this->fields[$recipient]->getSaveData();
-				$is_valid_email	 = true;
-			} elseif (!$is_valid_email) {
-				$is_valid_email = false;
-			}
+            $recipient = (string) $recipient;
 
-			// Send e-mail
-			if ($is_valid_email AND $this->sendEmail($recipient)) {
-				return true;
-			} else {
+            // Is this a valid e-mail
+            $is_valid_email = !(filter_var($recipient, FILTER_VALIDATE_EMAIL) === false);
 
-				$this->errors[] = Language::_('FORM_COULD_NOT_SEND_EMAIL');
+            // Is this not a valid email but a valid form field name that holds an e-mail
+            if (!$is_valid_email AND isset($this->fields[$recipient]) AND ! (filter_var($this->fields[$recipient]->getSaveData(),
+                    FILTER_VALIDATE_EMAIL) === false)) {
+                $recipient      = $this->fields[$recipient]->getSaveData();
+                $is_valid_email = true;
+            } elseif (!$is_valid_email) {
+                $is_valid_email = false;
+            }
 
-				return false;
-			}
-		}
-	}
+            // Send e-mail
+            if ($is_valid_email AND $this->sendEmail($recipient)) {
+                return true;
+            } else {
 
-	/**
-	 * Send e-mail with form input to the selected e-mail address.
-	 * 
-	 * @param	String	$recipient_email	Recipient e-mail address.
-	 * @return	Boolean
-	 */
-	private function sendEmail($recipient_email)
-	{
+                $this->errors[] = Language::_('FORM_COULD_NOT_SEND_EMAIL');
 
-		// Generate an e-mail template file
-		$path = get_template_directory().'/template-parts/emails/'.$this->name.'.php';
+                return false;
+            }
+        }
+    }
 
-		// Default e-mail options
-		$mail_subject		 = $this->mail_subject;
-		$mail_sender		 = $this->mail_sender;
-		$mail_sender_name	 = $this->mail_sender_name;
-		$mail_recipient		 = $recipient_email;
+    /**
+     * Send e-mail with form input to the selected e-mail address.
+     *
+     * @param    String    $recipient_email    Recipient e-mail address.
+     * @return    Boolean
+     */
+    private function sendEmail($recipient_email)
+    {
 
-		// If e-mail template file exists
-		if (file_exists($path)) {
+        // Generate an e-mail template file
+        $path = get_template_directory().'/template-parts/emails/'.$this->name.'.php';
 
-			// Generate e-mail body
-			ob_start();
-			require $path;
-			$mail_body = ob_get_clean();
+        // Default e-mail options
+        $mail_subject     = $this->mail_subject;
+        $mail_sender      = $this->mail_sender;
+        $mail_sender_name = $this->mail_sender_name;
+        $mail_recipient   = $recipient_email;
 
-			// There is no e-mail template. Use default view
-		} else {
+        // If e-mail template file exists
+        if (file_exists($path)) {
 
-			// List of field types that should not be processed
-			$hide_fields = array(
-				'\\BestProject\Wordpress\\Form\\Field\\Submit',
-				'\\BestProject\Wordpress\\Form\\Field\\Button',
-			);
+            // Generate e-mail body
+            ob_start();
+            require $path;
+            $mail_body = ob_get_clean();
 
-			$mail_body = '';
-			/* @var $field Field */
-			foreach ($this->fields AS $field) {
+            // There is no e-mail template. Use default view
+        } else {
 
-				if (!in_array(get_class($field), $hide_fields)) {
-					$mail_body	 .= '<div>';
-					$mail_body	 .= '<h4>'.$field->get('label').'</h4>';
-					$mail_body	 .= $field->getSaveData();
-					$mail_body	 .= '</div>'."\n";
-				}
-			}
-		}
+            // List of field types that should not be processed
+            $hide_fields = array(
+                '\\BestProject\Wordpress\\Form\\Field\\Submit',
+                '\\BestProject\Wordpress\\Form\\Field\\Button',
+            );
 
-		// If any of required parameters is missing, return failure
-		if (empty($mail_subject) OR empty($mail_sender) OR empty($mail_sender_name) OR empty($mail_body)) {
-			return false;
+            $mail_body = '';
+            /* @var $field Field */
+            foreach ($this->fields AS $field) {
 
-			// We have all the data, so send the message
-		} else {
-			$headers[]	 = 'MIME-Version: 1.0';
-			$headers[]	 = 'Content-type: text/html; charset=utf-8';
+                if (!in_array(get_class($field), $hide_fields)) {
+                    $mail_body .= '<div>';
+                    $mail_body .= '<h4>'.$field->get('label').'</h4>';
+                    $mail_body .= $field->getSaveData();
+                    $mail_body .= '</div>'."\n";
+                }
+            }
+        }
 
-			// Add sender name if provided
-			if( !empty($mail_sender_name) ) {
-				$headers[]	 = 'From: '.$mail_sender_name.' <'.$mail_sender.'>';
+        // If any of required parameters is missing, return failure
+        if (empty($mail_subject) OR empty($mail_sender) OR empty($mail_sender_name) OR empty($mail_body)) {
+            return false;
 
-			// No sender name, just set an e-mail address
-			} else {
-				$headers[]	 = 'From: '.$mail_sender;
-			}
+            // We have all the data, so send the message
+        } else {
+            $headers[] = 'MIME-Version: 1.0';
+            $headers[] = 'Content-type: text/html; charset=utf-8';
 
-			// Send email and return its
-			return mail($mail_recipient, $mail_subject, $mail_body,
-				implode("\r\n", $headers));
-		}
+            // Add sender name if provided
+            if (!empty($mail_sender_name)) {
+                $headers[] = 'From: '.$mail_sender_name.' <'.$mail_sender.'>';
 
-		return true;
-	}
+                // No sender name, just set an e-mail address
+            } else {
+                $headers[] = 'From: '.$mail_sender;
+            }
 
-	/**
-	 * Returns an instance of a selected form field.
-	 * 
-	 * @param	String			$name	Name of a field to return.
-	 * @return	Field|Boolean
-	 */
-	public function &getField($name)
-	{
+            // Send email and return its
+            return mail($mail_recipient, $mail_subject, $mail_body,
+                implode("\r\n", $headers));
+        }
 
-		// If field with this name was set in this form, return its reference.
-		if (isset($this->fields[$name])) {
-			return $this->fields[$name];
-		}
+        return true;
+    }
 
-		return false;
-	}
+    /**
+     * Returns an instance of a selected form field.
+     *
+     * @param    String            $name    Name of a field to return.
+     * @return    Field|Boolean
+     */
+    public function &getField($name)
+    {
+
+        // If field with this name was set in this form, return its reference.
+        if (isset($this->fields[$name])) {
+            return $this->fields[$name];
+        }
+
+        return false;
+    }
 }
